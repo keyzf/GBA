@@ -78,7 +78,6 @@ var games = {
     "mysteryred":"Pokemon Mystery Dungeon Red",
     "pokemonruby":"Pokemon Ruby",
     "pokemonsapphire":"Pokemon Sapphire",
-    "pokemonuv":"Pokemon Ultra Violet (Fire Red Mod)",
     "pokemonred":"Pokemon Fire Red",
     "pokemonlp":"Pokemon Light Platinum (Ruby Mod)",
     "gba_video_pokemon_1":"Pokemon Video Pak 1",

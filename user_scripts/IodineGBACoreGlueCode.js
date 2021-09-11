@@ -94,6 +94,7 @@ var games = {
     "supermarioadvance2":"Super Mario Advance 2",
     "supermarioadvance3":"Super Mario Advance 3",
     "supermarioadvance4":"Super Mario Advance 4",
+    "sma4+":"Super Mario Advance 4 (Wii U Version)",
     "simpsons":"The Simpsons: Road Rage",
     "sonicpinball":"Sonic Pinball",
     "super_street_fighter_2_turbo_revival":"Super Street Fighter II: Turbo Revival",

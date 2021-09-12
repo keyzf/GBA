@@ -57,6 +57,7 @@ var games = {
     "mariokart":"Mario Kart: Super Circuit",
     "marioparty":"Mario Party Advance",
     "mariopinball":"Mario Pinball Land",
+    "mgat":"Mario Golf - Advance Tour",
     "mvsdk":"Mario V.S. Donkey Kong",
     "megamanbass":"Megaman & Bass",
     "megaman_battle1":"Megaman Battle Network 1",

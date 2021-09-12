@@ -96,6 +96,8 @@ var games = {
     "gba_video_pokemon_3":"Pokemon Video Pak 3",
     "gba_video_pokemon_4":"Pokemon Video Pak 4",
     "pprs":"Pokemon Pinball - Ruby & Sapphire",
+    "ppf":"Puyo Pop Fever",
+    "r3hh":"Rayman 3 - Hoodlum Havoc",
     "sonic_advance":"Sonic Advance",
     "sonic_advance2":"Sonic Advance 2",
     "sonic_advance3":"Sonic Advance 3",

@@ -1,11 +1,8 @@
 "use strict";
 /*
- Copyright (C) 2012-2014 Grant Galitz
- 
+ Copyright (C) 2012-2015 Grant Galitz
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- 
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 function getInt8Array(size_t) {
@@ -22,6 +19,23 @@ function getUint8Array(size_t) {
     }
     catch (error) {
         return getArray(size_t);
+    }
+}
+function getUint8View(typed_array) {
+    try {
+        return new Uint8Array(typed_array.buffer);
+    }
+    catch (error) {
+        return null;
+    }
+}
+function getSharedUint8Array(size_t) {
+    try {
+        //Compatibility for older Firefox Nightlies:
+        return new SharedUint8Array(size_t);
+    }
+    catch (error) {
+        return new Uint8Array(new SharedArrayBuffer(size_t));
     }
 }
 function getInt16Array(size_t) {
@@ -66,6 +80,31 @@ function getInt32View(typed_array) {
 }
 function getInt32ViewCustom(typed_array, start, end) {
     try {
+        typed_array = getInt32View(typed_array);
+        return typed_array.subarray(start, end);
+    }
+    catch (error) {
+        try {
+            //Nightly Firefox 4 used to have the subarray function named as slice:
+            return typed_array.slice(start, end);
+        }
+        catch (error) {
+            return null;
+        }
+    }
+}
+function getSharedInt32Array(size_t) {
+    try {
+        //Compatibility for older Firefox Nightlies:
+        return new SharedInt32Array(size_t);
+    }
+    catch (error) {
+        return new Int32Array(new SharedArrayBuffer(size_t << 2));
+    }
+}
+function getUint8ViewCustom(typed_array, start, end) {
+    try {
+        typed_array = getUint8View(typed_array);
         return typed_array.subarray(start, end);
     }
     catch (error) {
@@ -86,12 +125,30 @@ function getUint32Array(size_t) {
         return getArray(size_t);
     }
 }
+function getSharedUint32Array(size_t) {
+    try {
+        //Compatibility for older Firefox Nightlies:
+        return new SharedUint32Array(size_t);
+    }
+    catch (error) {
+        return new Uint32Array(new SharedArrayBuffer(size_t << 2));
+    }
+}
 function getFloat32Array(size_t) {
     try {
         return new Float32Array(size_t);
     }
     catch (error) {
         return getArray(size_t);
+    }
+}
+function getSharedFloat32Array(size_t) {
+    try {
+        //Compatibility for older Firefox Nightlies:
+        return new SharedFloat32Array(size_t);
+    }
+    catch (error) {
+        return new Float32Array(new SharedArrayBuffer(size_t << 2));
     }
 }
 function getArray(size_t) {
@@ -113,3 +170,14 @@ var __LITTLE_ENDIAN__ = (function () {
     }
     return false;
 })();
+if (typeof Atomics == "object") {
+    if (typeof Atomics.futexWait == "function" && typeof Atomics.wait == "undefined") {
+        //Polyfill in deprecated call names:
+        Atomics.wait = Atomics.futexWait;
+        Atomics.notify = Atomics.futexWake;
+    }
+	else if (typeof Atomics.wake == "function" && typeof Atomics.notify == "undefined") {
+        //Polyfill in deprecated call names:
+        Atomics.notify = Atomics.wake;
+    }
+}

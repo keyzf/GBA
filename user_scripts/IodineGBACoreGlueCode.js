@@ -88,6 +88,7 @@ var games = {
     "pokemonflorasky":"Pokemon Flora Sky Rom Hack",
     "pokemonemerald":"Pokemon Emerald",
     "pokemonek":"Pokemon Emerald (Kaizo Mod)",
+    "pokemongb":"The Pokemon Collection",
     "pokemongreen":"Pokemon Leaf Green",
     "mysteryred":"Pokemon Mystery Dungeon Red",
     "pokemonruby":"Pokemon Ruby",
@@ -130,8 +131,7 @@ var games = {
     "warioland4":"Wario Land 4",
     "wario_ware":"Wario Ware Inc",
     "zelda_past":"The Legend of Zelda: A Link to the Past",
-    "zelda_minish":"The Legend of Zelda: The Minish Cap",
-    "pokemongb":"The Pokemon Collection"
+    "zelda_minish":"The Legend of Zelda: The Minish Cap"
 };
 var Iodine = null;
 var Blitter = null;

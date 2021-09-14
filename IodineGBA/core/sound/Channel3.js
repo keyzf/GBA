@@ -11,7 +11,9 @@
 function GameBoyAdvanceChannel3Synth(sound) {
     this.sound = sound;
     this.currentSampleLeft = 0;
+    this.currentSampleLeftSecondary = 0;
     this.currentSampleRight = 0;
+    this.currentSampleRightSecondary = 0;
     this.lastSampleLookup = 0;
     this.canPlay = false;
     this.WAVERAMBankSpecified = 0;
@@ -22,9 +24,7 @@ function GameBoyAdvanceChannel3Synth(sound) {
     this.frequency = 0;
     this.FrequencyPeriod = 0x4000;
     this.consecutive = true;
-    this.Enabled = 0;
-    this.leftEnable = 0;
-    this.rightEnable = 0;
+    this.Enabled = false;
     this.nr30 = 0;
     this.nr31 = 0;
     this.nr32 = 0;
@@ -58,7 +58,7 @@ GameBoyAdvanceChannel3Synth.prototype.disabled = function () {
     //Clear NR34:
     this.nr34 = 0;
     this.consecutive = true;
-    this.Enabled = 0;
+    this.Enabled = false;
     this.counter = 0;
 }
 if (typeof Math.imul == "function") {
@@ -86,15 +86,19 @@ else {
     }
 }
 GameBoyAdvanceChannel3Synth.prototype.outputLevelCache = function () {
-    var cachedSample = this.cachedSample & this.Enabled;
-    this.currentSampleLeft = this.leftEnable & cachedSample;
-    this.currentSampleRight = this.rightEnable & cachedSample;
+    this.currentSampleLeft = (this.sound.leftChannel3) ? (this.cachedSample | 0) : 0;
+    this.currentSampleRight = (this.sound.rightChannel3) ? (this.cachedSample | 0) : 0;
+    this.outputLevelSecondaryCache();
 }
-GameBoyAdvanceChannel3Synth.prototype.setChannelOutputEnable = function (data) {
-    data = data | 0;
-    //Set by NR51 handler:
-    this.rightEnable = (data << 29) >> 31;
-    this.leftEnable = (data << 25) >> 31;
+GameBoyAdvanceChannel3Synth.prototype.outputLevelSecondaryCache = function () {
+    if (this.Enabled) {
+        this.currentSampleLeftSecondary = this.currentSampleLeft | 0;
+        this.currentSampleRightSecondary = this.currentSampleRight | 0;
+    }
+    else {
+        this.currentSampleLeftSecondary = 0;
+        this.currentSampleRightSecondary = 0;
+    }
 }
 GameBoyAdvanceChannel3Synth.prototype.readWAVE8 = function (address) {
     address = ((address | 0) + (this.WAVERAMBankAccessed >> 1)) | 0;
@@ -104,6 +108,9 @@ if (__LITTLE_ENDIAN__) {
     GameBoyAdvanceChannel3Synth.prototype.writeWAVE8 = function (address, data) {
         address = address | 0;
         data = data | 0;
+        if (this.canPlay) {
+            this.sound.audioJIT();
+        }
         address = ((address | 0) + (this.WAVERAMBankAccessed >> 1)) | 0;
         this.WAVERAM8[address | 0] = data & 0xFF;
         var temp = ((data >> 4) & 0xF);
@@ -113,6 +120,9 @@ if (__LITTLE_ENDIAN__) {
     GameBoyAdvanceChannel3Synth.prototype.writeWAVE16 = function (address, data) {
         address = address | 0;
         data = data | 0;
+        if (this.canPlay) {
+            this.sound.audioJIT();
+        }
         address = ((address | 0) + (this.WAVERAMBankAccessed >> 2)) | 0;
         this.WAVERAM16[address | 0] = data & 0xFFFF;
         var temp = ((data >> 4) & 0xF);
@@ -124,6 +134,9 @@ if (__LITTLE_ENDIAN__) {
     GameBoyAdvanceChannel3Synth.prototype.writeWAVE32 = function (address, data) {
         address = address | 0;
         data = data | 0;
+        if (this.canPlay) {
+            this.sound.audioJIT();
+        }
         address = ((address | 0) + (this.WAVERAMBankAccessed >> 3)) | 0;
         this.WAVERAM32[address | 0] = data | 0;
         var temp = (data >> 4) & 0xF;
@@ -149,6 +162,9 @@ if (__LITTLE_ENDIAN__) {
 }
 else {
     GameBoyAdvanceChannel3Synth.prototype.writeWAVE8 = function (address, data) {
+        if (this.canPlay) {
+            this.sound.audioJIT();
+        }
         address += this.WAVERAMBankAccessed >> 1;
         this.WAVERAM8[address] = data & 0xFF;
         address <<= 1;
@@ -156,6 +172,9 @@ else {
         this.PCM[address | 1] = data & 0xF;
     }
     GameBoyAdvanceChannel3Synth.prototype.writeWAVE16 = function (address, data) {
+        if (this.canPlay) {
+            this.sound.audioJIT();
+        }
         address += this.WAVERAMBankAccessed >> 2;
         address <<= 1;
         this.WAVERAM8[address] = data & 0xFF;
@@ -167,6 +186,9 @@ else {
         this.PCM[address | 3] = (data >> 8) & 0xF;
     }
     GameBoyAdvanceChannel3Synth.prototype.writeWAVE32 = function (address, data) {
+        if (this.canPlay) {
+            this.sound.audioJIT();
+        }
         address += this.WAVERAMBankAccessed >> 3;
         address <<= 2;
         this.WAVERAM8[address] = data & 0xFF;
@@ -194,12 +216,7 @@ else {
     }
 }
 GameBoyAdvanceChannel3Synth.prototype.enableCheck = function () {
-    if (/*this.canPlay && */(this.consecutive || (this.totalLength | 0) > 0)) {
-        this.Enabled = 0xF;
-    }
-    else {
-        this.Enabled = 0;
-    }
+    this.Enabled = (/*this.canPlay && */(this.consecutive || (this.totalLength | 0) > 0));
 }
 GameBoyAdvanceChannel3Synth.prototype.clockAudioLength = function () {
     if ((this.totalLength | 0) > 1) {
@@ -227,22 +244,22 @@ GameBoyAdvanceChannel3Synth.prototype.readSOUND3CNT_L = function () {
 GameBoyAdvanceChannel3Synth.prototype.writeSOUND3CNT_L = function (data) {
     data = data | 0;
     //NR30:
-    if (!this.canPlay && (data & 0x80) != 0) {
+    if (!this.canPlay && (data | 0) >= 0x80) {
         this.lastSampleLookup = 0;
     }
-    this.canPlay = ((data & 0x80) != 0);
+    this.canPlay = (data > 0x7F);
     this.WaveRAMBankSize = (data & 0x20) | 0x1F;
     this.WAVERAMBankSpecified = ((data & 0x40) >> 1) ^ (data & 0x20);
     this.WAVERAMBankAccessed = ((data & 0x40) >> 1) ^ 0x20;
-    if (this.canPlay && (this.nr30 & 0x80) != 0 && !this.consecutive) {
+    if (this.canPlay && (this.nr30 | 0) > 0x7F && !this.consecutive) {
         this.sound.setNR52(0x4);
     }
-    this.nr30 = data & 0xFF;
+    this.nr30 = data | 0;
 }
 GameBoyAdvanceChannel3Synth.prototype.writeSOUND3CNT_H0 = function (data) {
     data = data | 0;
     //NR31:
-    this.totalLength = (0x100 - (data & 0xFF)) | 0;
+    this.totalLength = (0x100 - (data | 0)) | 0;
     this.enableCheck();
 }
 GameBoyAdvanceChannel3Synth.prototype.readSOUND3CNT_H = function () {
@@ -252,7 +269,6 @@ GameBoyAdvanceChannel3Synth.prototype.readSOUND3CNT_H = function () {
 GameBoyAdvanceChannel3Synth.prototype.writeSOUND3CNT_H1 = function (data) {
     data = data | 0;
     //NR32:
-    data = data & 0xFF;
     switch (data >> 5) {
         case 0:
             this.patternType = 4;
@@ -274,7 +290,7 @@ GameBoyAdvanceChannel3Synth.prototype.writeSOUND3CNT_H1 = function (data) {
 GameBoyAdvanceChannel3Synth.prototype.writeSOUND3CNT_X0 = function (data) {
     data = data | 0;
     //NR33:
-    this.frequency = (this.frequency & 0x700) | (data & 0xFF);
+    this.frequency = (this.frequency & 0x700) | data;
     this.FrequencyPeriod = (0x800 - (this.frequency | 0)) << 3;
 }
 GameBoyAdvanceChannel3Synth.prototype.readSOUND3CNT_X = function () {
@@ -284,7 +300,7 @@ GameBoyAdvanceChannel3Synth.prototype.readSOUND3CNT_X = function () {
 GameBoyAdvanceChannel3Synth.prototype.writeSOUND3CNT_X1 = function (data) {
     data = data | 0;
     //NR34:
-    if ((data & 0x80) != 0) {
+    if ((data | 0) > 0x7F) {
         if ((this.totalLength | 0) == 0) {
             this.totalLength = 0x100;
         }
@@ -297,5 +313,5 @@ GameBoyAdvanceChannel3Synth.prototype.writeSOUND3CNT_X1 = function (data) {
     this.frequency = ((data & 0x7) << 8) | (this.frequency & 0xFF);
     this.FrequencyPeriod = (0x800 - (this.frequency | 0)) << 3;
     this.enableCheck();
-    this.nr34 = data & 0xFF;
+    this.nr34 = data | 0;
 }

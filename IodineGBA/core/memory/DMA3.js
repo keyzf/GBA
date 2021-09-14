@@ -39,58 +39,45 @@ GameBoyAdvanceDMA3.prototype.initialize = function () {
     this.gfxState = this.IOCore.gfxState;
     this.irq = this.IOCore.irq;
 }
-GameBoyAdvanceDMA3.prototype.validateDMASource = function (address) {
-    address = address | 0;
-    if ((address | 0) >= 0x2000000) {
-        this.source = address | 0;
-    }
-}
 GameBoyAdvanceDMA3.prototype.writeDMASource8_0 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFFFF00;
+    this.source = this.source & 0xFFFFF00;
     data = data & 0xFF;
-    source = source | data;
-    this.validateDMASource(source | 0);
+    this.source = this.source | data;
 }
 GameBoyAdvanceDMA3.prototype.writeDMASource8_1 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFF00FF;
+    this.source = this.source & 0xFFF00FF;
     data = data & 0xFF;
-    source = source | (data << 8);
-    this.validateDMASource(source | 0);
+    this.source = this.source | (data << 8);
 }
 GameBoyAdvanceDMA3.prototype.writeDMASource8_2 = function (data) {
     data = data | 0;
-    var source = this.source & 0xF00FFFF;
+    this.source = this.source & 0xF00FFFF;
     data = data & 0xFF;
-    source = source | (data << 16);
-    this.validateDMASource(source | 0);
+    this.source = this.source | (data << 16);
 }
 GameBoyAdvanceDMA3.prototype.writeDMASource8_3 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFFFFF;
+    this.source = this.source & 0xFFFFFF;
     data = data & 0xF;
-    source = source | (data << 24);
-    this.validateDMASource(source | 0);
+    this.source = this.source | (data << 24);
 }
 GameBoyAdvanceDMA3.prototype.writeDMASource16_0 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFF0000;
+    this.source = this.source & 0xFFF0000;
     data = data & 0xFFFF;
-    source = source | data;
-    this.validateDMASource(source | 0);
+    this.source = this.source | data;
 }
 GameBoyAdvanceDMA3.prototype.writeDMASource16_1 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFFF;
+    this.source = this.source & 0xFFFF;
     data = data & 0xFFF;
-    source = source | (data << 16);
-    this.validateDMASource(source | 0);
+    this.source = this.source | (data << 16);
 }
 GameBoyAdvanceDMA3.prototype.writeDMASource32 = function (data) {
     data = data | 0;
-    var source = data & 0xFFFFFFF;
-    this.validateDMASource(source | 0);
+    this.source = data & 0xFFFFFFF;
 }
 GameBoyAdvanceDMA3.prototype.writeDMADestination8_0 = function (data) {
     data = data | 0;

@@ -37,113 +37,85 @@ GameBoyAdvanceDMA0.prototype.initialize = function () {
     this.gfxState = this.IOCore.gfxState;
     this.irq = this.IOCore.irq;
 }
-GameBoyAdvanceDMA0.prototype.validateDMASource = function (address) {
-    address = address | 0;
-    if ((address | 0) >= 0x2000000) {
-        if ((address | 0) <= 0x7FFFFFF || (address | 0) >= 0xE000000) {
-            this.source = address | 0;
-        }
-    }
-}
-GameBoyAdvanceDMA0.prototype.validateDMADestination = function (address) {
-    address = address | 0;
-    if ((address | 0) <= 0x7FFFFFF) {
-        this.destination = address | 0;
-    }
-}
 GameBoyAdvanceDMA0.prototype.writeDMASource8_0 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFFFF00;
+    this.source = this.source & 0x7FFFF00;
     data = data & 0xFF;
-    source = source | data;
-    this.validateDMASource(source | 0);
+    this.source = this.source | data;
 }
 GameBoyAdvanceDMA0.prototype.writeDMASource8_1 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFF00FF;
+    this.source = this.source & 0x7FF00FF;
     data = data & 0xFF;
-    source = source | (data << 8);
-    this.validateDMASource(source | 0);
+    this.source = this.source | (data << 8);
 }
 GameBoyAdvanceDMA0.prototype.writeDMASource8_2 = function (data) {
     data = data | 0;
-    var source = this.source & 0xF00FFFF;
+    this.source = this.source & 0x700FFFF;
     data = data & 0xFF;
-    source = source | (data << 16);
-    this.validateDMASource(source | 0);
+    this.source = this.source | (data << 16);
 }
 GameBoyAdvanceDMA0.prototype.writeDMASource8_3 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFFFFF;
-    data = data & 0xF;
-    source = source | (data << 24);
-    this.validateDMASource(source | 0);
+    this.source = this.source & 0xFFFFFF;
+    data = data & 0x7;
+    this.source = this.source | (data << 24);
 }
 GameBoyAdvanceDMA0.prototype.writeDMASource16_0 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFF0000;
+    this.source = this.source & 0x7FF0000;
     data = data & 0xFFFF;
-    source = source | data;
-    this.validateDMASource(source | 0);
+    this.source = this.source | data;
 }
 GameBoyAdvanceDMA0.prototype.writeDMASource16_1 = function (data) {
     data = data | 0;
-    var source = this.source & 0xFFFF;
-    data = data & 0xFFF;
-    source = source | (data << 16);
-    this.validateDMASource(source | 0);
+    this.source = this.source & 0xFFFF;
+    data = data & 0x7FF;
+    this.source = this.source | (data << 16);
 }
 GameBoyAdvanceDMA0.prototype.writeDMASource32 = function (data) {
     data = data | 0;
-    var source = data & 0xFFFFFFF;
-    this.validateDMASource(source | 0);
+    this.source = data & 0x7FFFFFF;
 }
 GameBoyAdvanceDMA0.prototype.writeDMADestination8_0 = function (data) {
     data = data | 0;
-    var destination = this.destination & 0xFFFFF00;
+    this.destination = this.destination & 0x7FFFF00;
     data = data & 0xFF;
-    destination = destination | data;
-    this.validateDMADestination(destination | 0);
+    this.destination = this.destination | data;
 }
 GameBoyAdvanceDMA0.prototype.writeDMADestination8_1 = function (data) {
     data = data | 0;
-    var destination = this.destination & 0xFFF00FF;
+    this.destination = this.destination & 0x7FF00FF;
     data = data & 0xFF;
-    destination = destination | (data << 8);
-    this.validateDMADestination(destination | 0);
+    this.destination = this.destination | (data << 8);
 }
 GameBoyAdvanceDMA0.prototype.writeDMADestination8_2 = function (data) {
     data = data | 0;
-    var destination = this.destination & 0xF00FFFF;
+    this.destination = this.destination & 0x700FFFF;
     data = data & 0xFF;
-    destination = destination | (data << 16);
-    this.validateDMADestination(destination | 0);
+    this.destination = this.destination | (data << 16);
 }
 GameBoyAdvanceDMA0.prototype.writeDMADestination8_3 = function (data) {
     data = data | 0;
-    var destination = this.destination & 0xFFFFFF;
-    data = data & 0xF;
-    destination = destination | (data << 24);
-    this.validateDMADestination(destination | 0);
+    this.destination = this.destination & 0xFFFFFF;
+    data = data & 0x7;
+    this.destination = this.destination | (data << 24);
 }
 GameBoyAdvanceDMA0.prototype.writeDMADestination16_0 = function (data) {
     data = data | 0;
-    var destination = this.destination & 0xFFF0000;
+    this.destination = this.destination & 0x7FF0000;
     data = data & 0xFFFF;
-    destination = destination | data;
-    this.validateDMADestination(destination | 0);
+    this.destination = this.destination | data;
 }
 GameBoyAdvanceDMA0.prototype.writeDMADestination16_1 = function (data) {
     data = data | 0;
-    var destination = this.destination & 0xFFFF;
-    data = data & 0xFFF;
-    destination = destination | (data << 16);
-    this.validateDMADestination(destination | 0);
+    this.destination = this.destination & 0xFFFF;
+    data = data & 0x7FF;
+    this.destination = this.destination | (data << 16);
 }
 GameBoyAdvanceDMA0.prototype.writeDMADestination32 = function (data) {
     data = data | 0;
-    var destination = data & 0xFFFFFFF;
-    this.validateDMADestination(destination | 0);
+    this.destination = data & 0x7FFFFFF;
 }
 GameBoyAdvanceDMA0.prototype.writeDMAWordCount8_0 = function (data) {
     data = data | 0;

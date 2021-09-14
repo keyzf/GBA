@@ -1,14 +1,14 @@
 "use strict";
 /*
- Copyright (C) 2012-2016 Grant Galitz
-
+ Copyright (C) 2012-2015 Grant Galitz
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
+ 
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
+ 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-function GameBoyAdvanceIO(SKIPBoot, coreExposed, BIOS, ROM) {
+function GameBoyAdvanceIO(settings, coreExposed, BIOS, ROM) {
     //State Machine Tracking:
     this.systemStatus = 0;
     this.cyclesToIterate = 0;
@@ -18,10 +18,9 @@ function GameBoyAdvanceIO(SKIPBoot, coreExposed, BIOS, ROM) {
     this.timerClocks = 0;
     this.serialClocks = 0;
     this.nextEventClocks = 0;
-    //this.BIOSFound = false;
-    //Do we skip the BIOS Boot Intro?
-    this.SKIPBoot = !!SKIPBoot;
+    this.BIOSFound = false;
     //References passed to us:
+    this.settings = settings;
     this.coreExposed = coreExposed;
     this.BIOS = BIOS;
     this.ROM = ROM;
@@ -43,33 +42,24 @@ function GameBoyAdvanceIO(SKIPBoot, coreExposed, BIOS, ROM) {
     this.saves = new GameBoyAdvanceSaves(this);
     this.wait = new GameBoyAdvanceWait(this);
     this.cpu = new GameBoyAdvanceCPU(this);
-}
-GameBoyAdvanceIO.prototype.initialize = function () {
-    var allowInit = 1;
     //Now initialize each component:
-    if ((this.memory.initialize() | 0) == 1) {
-        //BIOS loaded in OK, so initialize the rest:
-        this.dma.initialize();
-        this.dmaChannel0.initialize();
-        this.dmaChannel1.initialize();
-        this.dmaChannel2.initialize();
-        this.dmaChannel3.initialize();
-        this.gfxState.initialize();
-        this.gfxRenderer.initialize();
-        this.sound.initialize();
-        this.timer.initialize();
-        this.irq.initialize();
-        this.serial.initialize();
-        this.joypad.initialize();
-        this.cartridge.initialize();
-        this.saves.initialize();
-        this.wait.initialize();
-        this.cpu.initialize();
-    }
-    else {
-        allowInit = 0;
-    }
-    return allowInit | 0;
+    this.memory.initialize();
+    this.dma.initialize();
+    this.dmaChannel0.initialize();
+    this.dmaChannel1.initialize();
+    this.dmaChannel2.initialize();
+    this.dmaChannel3.initialize();
+    this.gfxState.initialize();
+    this.gfxRenderer.initialize();
+    this.sound.initialize();
+    this.timer.initialize();
+    this.irq.initialize();
+    this.serial.initialize();
+    this.joypad.initialize();
+    this.cartridge.initialize();
+    this.saves.initialize();
+    this.wait.initialize();
+    this.cpu.initialize();
 }
 GameBoyAdvanceIO.prototype.assignInstructionCoreReferences = function (ARM, THUMB) {
     //Passed here once the CPU component is initialized:

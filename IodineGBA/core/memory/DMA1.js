@@ -8,16 +8,16 @@
  
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-function GameBoyAdvanceDMA1(IOCore) {
+function GameBoyAdvanceDMA2(IOCore) {
     this.IOCore = IOCore;
 }
-GameBoyAdvanceDMA1.prototype.DMA_ENABLE_TYPE = [            //DMA Channel 1 Mapping:
+GameBoyAdvanceDMA2.prototype.DMA_ENABLE_TYPE = [            //DMA Channel 2 Mapping:
     0x1,
     0x2,
     0x4,
-    0x8
+    0x10
 ];
-GameBoyAdvanceDMA1.prototype.initialize = function () {
+GameBoyAdvanceDMA2.prototype.initialize = function () {
     this.enabled = 0;
     this.pending = 0;
     this.source = 0;
@@ -39,109 +39,109 @@ GameBoyAdvanceDMA1.prototype.initialize = function () {
     this.sound = this.IOCore.sound;
     this.wait = this.IOCore.wait;
 }
-GameBoyAdvanceDMA1.prototype.writeDMASource8_0 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMASource8_0 = function (data) {
     data = data | 0;
     this.source = this.source & 0xFFFFF00;
     data = data & 0xFF;
     this.source = this.source | data;
 }
-GameBoyAdvanceDMA1.prototype.writeDMASource8_1 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMASource8_1 = function (data) {
     data = data | 0;
     this.source = this.source & 0xFFF00FF;
     data = data & 0xFF;
     this.source = this.source | (data << 8);
 }
-GameBoyAdvanceDMA1.prototype.writeDMASource8_2 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMASource8_2 = function (data) {
     data = data | 0;
     this.source = this.source & 0xF00FFFF;
     data = data & 0xFF;
     this.source = this.source | (data << 16);
 }
-GameBoyAdvanceDMA1.prototype.writeDMASource8_3 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMASource8_3 = function (data) {
     data = data | 0;
     this.source = this.source & 0xFFFFFF;
     data = data & 0xF;
     this.source = this.source | (data << 24);
 }
-GameBoyAdvanceDMA1.prototype.writeDMASource16_0 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMASource16_0 = function (data) {
     data = data | 0;
     this.source = this.source & 0xFFF0000;
     data = data & 0xFFFF;
     this.source = this.source | data;
 }
-GameBoyAdvanceDMA1.prototype.writeDMASource16_1 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMASource16_1 = function (data) {
     data = data | 0;
     this.source = this.source & 0xFFFF;
     data = data & 0xFFF;
     this.source = this.source | (data << 16);
 }
-GameBoyAdvanceDMA1.prototype.writeDMASource32 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMASource32 = function (data) {
     data = data | 0;
     this.source = data & 0xFFFFFFF;
 }
-GameBoyAdvanceDMA1.prototype.writeDMADestination8_0 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMADestination8_0 = function (data) {
     data = data | 0;
     this.destination = this.destination & 0x7FFFF00;
     data = data & 0xFF;
     this.destination = this.destination | data;
 }
-GameBoyAdvanceDMA1.prototype.writeDMADestination8_1 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMADestination8_1 = function (data) {
     data = data | 0;
     this.destination = this.destination & 0x7FF00FF;
     data = data & 0xFF;
     this.destination = this.destination | (data << 8);
 }
-GameBoyAdvanceDMA1.prototype.writeDMADestination8_2 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMADestination8_2 = function (data) {
     data = data | 0;
     this.destination = this.destination & 0x700FFFF;
     data = data & 0xFF;
     this.destination = this.destination | (data << 16);
 }
-GameBoyAdvanceDMA1.prototype.writeDMADestination8_3 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMADestination8_3 = function (data) {
     data = data | 0;
     this.destination = this.destination & 0xFFFFFF;
     data = data & 0x7;
     this.destination = this.destination | (data << 24);
 }
-GameBoyAdvanceDMA1.prototype.writeDMADestination16_0 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMADestination16_0 = function (data) {
     data = data | 0;
     this.destination = this.destination & 0x7FF0000;
     data = data & 0xFFFF;
     this.destination = this.destination | data;
 }
-GameBoyAdvanceDMA1.prototype.writeDMADestination16_1 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMADestination16_1 = function (data) {
     data = data | 0;
     this.destination = this.destination & 0xFFFF;
     data = data & 0x7FF;
     this.destination = this.destination | (data << 16);
 }
-GameBoyAdvanceDMA1.prototype.writeDMADestination32 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMADestination32 = function (data) {
     data = data | 0;
     this.destination = data & 0x7FFFFFF;
 }
-GameBoyAdvanceDMA1.prototype.writeDMAWordCount8_0 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMAWordCount8_0 = function (data) {
     data = data | 0;
     this.wordCount = this.wordCount & 0x3F00;
     data = data & 0xFF;
     this.wordCount = this.wordCount | data;
 }
-GameBoyAdvanceDMA1.prototype.writeDMAWordCount8_1 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMAWordCount8_1 = function (data) {
     data = data | 0;
     this.wordCount = this.wordCount & 0xFF;
     data = data & 0x3F;
     this.wordCount = this.wordCount | (data << 8);
 }
-GameBoyAdvanceDMA1.prototype.writeDMAWordCount16 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMAWordCount16 = function (data) {
     data = data | 0;
     this.wordCount = data & 0x3FFF;
 }
-GameBoyAdvanceDMA1.prototype.writeDMAControl8_0 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMAControl8_0 = function (data) {
     data = data | 0;
     this.destinationControl = (data >> 5) & 0x3;
     this.sourceControl = this.sourceControl & 0x2;
     this.sourceControl = this.sourceControl | ((data >> 7) & 0x1);
 }
-GameBoyAdvanceDMA1.prototype.writeDMAControl8_1 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMAControl8_1 = function (data) {
     data = data | 0;
     //Spill state machine clocks:
     this.IOCore.updateCoreClocking();
@@ -154,7 +154,7 @@ GameBoyAdvanceDMA1.prototype.writeDMAControl8_1 = function (data) {
     //Calculate next event:
     this.IOCore.updateCoreEventTime();
 }
-GameBoyAdvanceDMA1.prototype.writeDMAControl16 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMAControl16 = function (data) {
     data = data | 0;
     //Spill state machine clocks:
     this.IOCore.updateCoreClocking();
@@ -168,17 +168,17 @@ GameBoyAdvanceDMA1.prototype.writeDMAControl16 = function (data) {
     //Calculate next event:
     this.IOCore.updateCoreEventTime();
 }
-GameBoyAdvanceDMA1.prototype.writeDMAControl32 = function (data) {
+GameBoyAdvanceDMA2.prototype.writeDMAControl32 = function (data) {
     data = data | 0;
     this.writeDMAWordCount16(data | 0);
     this.writeDMAControl16(data >> 16);
 }
-GameBoyAdvanceDMA1.prototype.readDMAControl8_0 = function () {
+GameBoyAdvanceDMA2.prototype.readDMAControl8_0 = function () {
     var data = this.destinationControl << 5;
     data = data | ((this.sourceControl & 0x1) << 7);
     return data | 0;
 }
-GameBoyAdvanceDMA1.prototype.readDMAControl8_1 = function () {
+GameBoyAdvanceDMA2.prototype.readDMAControl8_1 = function () {
     var data = this.sourceControl >> 1;
     data = data | this.repeat;
     data = data | this.is32Bit;
@@ -189,7 +189,7 @@ GameBoyAdvanceDMA1.prototype.readDMAControl8_1 = function () {
     }
     return data | 0;
 }
-GameBoyAdvanceDMA1.prototype.readDMAControl16 = function () {
+GameBoyAdvanceDMA2.prototype.readDMAControl16 = function () {
     var data = this.destinationControl << 5;
     data = data | (this.sourceControl << 7);
     data = data | (this.repeat << 8);
@@ -201,20 +201,20 @@ GameBoyAdvanceDMA1.prototype.readDMAControl16 = function () {
     }
     return data | 0;
 }
-GameBoyAdvanceDMA1.prototype.getMatchStatus = function () {
+GameBoyAdvanceDMA2.prototype.getMatchStatus = function () {
     return this.enabled & this.pending;
 }
-GameBoyAdvanceDMA1.prototype.soundFIFOARequest = function () {
-    this.requestDMA(0x8);
+GameBoyAdvanceDMA2.prototype.soundFIFOBRequest = function () {
+    this.requestDMA(0x10);
 }
-GameBoyAdvanceDMA1.prototype.requestDMA = function (DMAType) {
+GameBoyAdvanceDMA2.prototype.requestDMA = function (DMAType) {
     DMAType = DMAType | 0;
     if ((this.enabled & DMAType) != 0) {
         this.pending = DMAType | 0;
         this.DMACore.update();
     }
 }
-GameBoyAdvanceDMA1.prototype.enableDMAChannel = function (enabled) {
+GameBoyAdvanceDMA2.prototype.enableDMAChannel = function (enabled) {
     enabled = enabled | 0;
     if ((enabled | 0) != 0) {
         //If DMA was previously disabled, reload control registers:
@@ -230,7 +230,6 @@ GameBoyAdvanceDMA1.prototype.enableDMAChannel = function (enabled) {
                 default:
                     //Shadow copy the word count:
                     this.wordCountShadow = this.wordCount | 0;
-                    
             }
             //Shadow copy the source address:
             this.sourceShadow = this.source | 0;
@@ -239,9 +238,9 @@ GameBoyAdvanceDMA1.prototype.enableDMAChannel = function (enabled) {
         }
         //DMA type changed:
         this.enabled = this.DMA_ENABLE_TYPE[this.dmaType | 0] | 0;
-        this.pending = this.pending & this.enabled;
+        //this.pending = this.pending & this.enabled;
         //Assert the FIFO A DMA request signal:
-        this.sound.checkFIFOAPendingSignal();
+        this.sound.checkFIFOBPendingSignal();
     }
     else {
         //DMA Disabled:
@@ -250,11 +249,11 @@ GameBoyAdvanceDMA1.prototype.enableDMAChannel = function (enabled) {
     //Run some DMA channel activity checks:
     this.DMACore.update();
 }
-GameBoyAdvanceDMA1.prototype.handleDMACopy = function () {
+GameBoyAdvanceDMA2.prototype.handleDMACopy = function () {
     //Get the source addess:
     var source = this.sourceShadow | 0;
     //Transfer Data:
-    if ((this.enabled | 0) == 0x8) {
+    if ((this.enabled | 0) == 0x10) {
         //32-bit Transfer:
         this.copySound(source | 0);
     }
@@ -271,7 +270,7 @@ GameBoyAdvanceDMA1.prototype.handleDMACopy = function () {
         }
     }
 }
-GameBoyAdvanceDMA1.prototype.copy16 = function (source, destination) {
+GameBoyAdvanceDMA2.prototype.copy16 = function (source, destination) {
     source = source | 0;
     destination = destination | 0;
     var data = this.memory.memoryReadDMAFull16(source | 0) | 0;
@@ -279,7 +278,7 @@ GameBoyAdvanceDMA1.prototype.copy16 = function (source, destination) {
     this.decrementWordCount(source | 0, destination | 0, 2);
     this.DMACore.updateFetch(data | (data << 16));
 }
-GameBoyAdvanceDMA1.prototype.copy32 = function (source, destination) {
+GameBoyAdvanceDMA2.prototype.copy32 = function (source, destination) {
     source = source | 0;
     destination = destination | 0;
     var data = this.memory.memoryReadDMAFull32(source | 0) | 0;
@@ -287,16 +286,16 @@ GameBoyAdvanceDMA1.prototype.copy32 = function (source, destination) {
     this.decrementWordCount(source | 0, destination | 0, 4);
     this.DMACore.updateFetch(data | 0);
 }
-GameBoyAdvanceDMA1.prototype.copySound = function (source) {
+GameBoyAdvanceDMA2.prototype.copySound = function (source) {
     source = source | 0;
     var data = this.memory.memoryReadDMAFull32(source | 0) | 0;
     this.wait.singleClock();
     this.IOCore.updateTimerClocking();
-    this.sound.writeFIFOA32(data | 0);
+    this.sound.writeFIFOB32(data | 0);
     this.soundDMAUpdate(source | 0);
     this.DMACore.updateFetch(data | 0);
 }
-GameBoyAdvanceDMA1.prototype.decrementWordCount = function (source, destination, transferred) {
+GameBoyAdvanceDMA2.prototype.decrementWordCount = function (source, destination, transferred) {
     source = source | 0;
     destination = destination | 0;
     transferred = transferred | 0;
@@ -313,7 +312,7 @@ GameBoyAdvanceDMA1.prototype.decrementWordCount = function (source, destination,
     //Save the new word count:
     this.wordCountShadow = wordCountShadow | 0;
 }
-GameBoyAdvanceDMA1.prototype.soundDMAUpdate = function (source) {
+GameBoyAdvanceDMA2.prototype.soundDMAUpdate = function (source) {
     source = source | 0;
     //Decrement the word count:
     this.wordCountShadow = ((this.wordCountShadow | 0) - 1) & 0x3FFF;
@@ -331,8 +330,8 @@ GameBoyAdvanceDMA1.prototype.soundDMAUpdate = function (source) {
             //Direct Sound DMA Hardwired To Wordcount Of 4:
             this.wordCountShadow = 0x4;
         }
-        //Assert the FIFO A DMA request signal:
-        this.sound.checkFIFOAPendingSignal();
+        //Assert the FIFO B DMA request signal:
+        this.sound.checkFIFOBPendingSignal();
         //Run the DMA channel checks:
         this.DMACore.update();
         //Check to see if we should flag for IRQ:
@@ -348,7 +347,7 @@ GameBoyAdvanceDMA1.prototype.soundDMAUpdate = function (source) {
             this.sourceShadow = ((source | 0) - 4) | 0;
     }
 }
-GameBoyAdvanceDMA1.prototype.finalizeDMA = function (source, destination, transferred) {
+GameBoyAdvanceDMA2.prototype.finalizeDMA = function (source, destination, transferred) {
     source = source | 0;
     destination = destination | 0;
     transferred = transferred | 0;
@@ -365,8 +364,8 @@ GameBoyAdvanceDMA1.prototype.finalizeDMA = function (source, destination, transf
         //Reload word count:
         wordCountShadow = this.wordCount | 0;
     }
-    //Assert the FIFO A DMA request signal:
-    this.sound.checkFIFOAPendingSignal();
+    //Assert the FIFO B DMA request signal:
+    this.sound.checkFIFOBPendingSignal();
     //Run the DMA channel checks:
     this.DMACore.update();
     //Check to see if we should flag for IRQ:
@@ -375,12 +374,12 @@ GameBoyAdvanceDMA1.prototype.finalizeDMA = function (source, destination, transf
     this.finalDMAAddresses(source | 0, destination | 0, transferred | 0);
     return wordCountShadow | 0;
 }
-GameBoyAdvanceDMA1.prototype.checkIRQTrigger = function () {
+GameBoyAdvanceDMA2.prototype.checkIRQTrigger = function () {
     if ((this.irqFlagging | 0) != 0) {
-        this.irq.requestIRQ(0x200);
+        this.irq.requestIRQ(0x400);
     }
 }
-GameBoyAdvanceDMA1.prototype.finalDMAAddresses = function (source, destination, transferred) {
+GameBoyAdvanceDMA2.prototype.finalDMAAddresses = function (source, destination, transferred) {
     source = source | 0;
     destination = destination | 0;
     transferred = transferred | 0;
@@ -405,7 +404,7 @@ GameBoyAdvanceDMA1.prototype.finalDMAAddresses = function (source, destination, 
             this.destinationShadow = this.destination | 0;
     }
 }
-GameBoyAdvanceDMA1.prototype.incrementDMAAddresses = function (source, destination, transferred) {
+GameBoyAdvanceDMA2.prototype.incrementDMAAddresses = function (source, destination, transferred) {
     source = source | 0;
     destination = destination | 0;
     transferred = transferred | 0;
@@ -428,7 +427,7 @@ GameBoyAdvanceDMA1.prototype.incrementDMAAddresses = function (source, destinati
             this.destinationShadow = ((destination | 0) - (transferred | 0)) | 0;
     }
 }
-GameBoyAdvanceDMA1.prototype.nextEventTime = function () {
+GameBoyAdvanceDMA2.prototype.nextEventTime = function () {
     var clocks = 0x7FFFFFFF;
     switch (this.enabled | 0) {
             //V_BLANK
@@ -439,9 +438,9 @@ GameBoyAdvanceDMA1.prototype.nextEventTime = function () {
         case 0x4:
             clocks = this.gfxState.nextHBlankDMAEventTime() | 0;
             break;
-            //FIFO_A:
-        case 0x8:
-            clocks = this.sound.nextFIFOAEventTime() | 0;
+            //FIFO_B:
+        case 0x10:
+            clocks = this.sound.nextFIFOBEventTime() | 0;
     }
     return clocks | 0;
 }

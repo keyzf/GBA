@@ -1,11 +1,11 @@
 "use strict";
 /*
- Copyright (C) 2012-2016 Grant Galitz
-
+ Copyright (C) 2012-2015 Grant Galitz
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
+ 
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
+ 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 function GameBoyAdvanceSaves(IOCore) {
@@ -13,7 +13,8 @@ function GameBoyAdvanceSaves(IOCore) {
 }
 GameBoyAdvanceSaves.prototype.initialize = function () {
     this.saveType = 0;
-    this.GPIOChip = new GameBoyAdvanceGPIOChip();
+    this.gpioType = 0;
+    this.GPIOChip = null;
     this.UNDETERMINED = new GameBoyAdvanceSaveDeterminer(this);
     this.SRAMChip = new GameBoyAdvanceSRAMChip();
     this.FLASHChip = new GameBoyAdvanceFLASHChip(this.cartridge.flash_is128, this.cartridge.flash_isAtmel);
@@ -40,19 +41,11 @@ GameBoyAdvanceSaves.prototype.referenceSave = function (saveType) {
     this.saveType = saveType | 0;
 }
 GameBoyAdvanceSaves.prototype.importSave = function (saves, saveType) {
-    saveType = saveType | 0;
     this.UNDETERMINED.load(saves);
     this.SRAMChip.load(saves);
     this.FLASHChip.load(saves);
     this.EEPROMChip.load(saves);
     this.referenceSave(saveType | 0);
-}
-GameBoyAdvanceSaves.prototype.importRTC = function (saves) {
-    this.GPIOChip.loadRTC(saves);
-}
-GameBoyAdvanceSaves.prototype.importGPIOType = function (gpioType) {
-    gpioType = gpioType | 0;
-    this.GPIOChip.loadType(gpioType | 0);
 }
 GameBoyAdvanceSaves.prototype.exportSave = function () {
     return this.currentChip.saves;
@@ -63,7 +56,7 @@ GameBoyAdvanceSaves.prototype.exportSaveType = function () {
 GameBoyAdvanceSaves.prototype.readGPIO8 = function (address) {
     address = address | 0;
     var data = 0;
-    if ((this.GPIOChip.getType() | 0) > 0) {
+    if ((this.gpioType | 0) > 0) {
         //GPIO:
         data = this.GPIOChip.read8(address | 0) | 0;
     }
@@ -89,7 +82,7 @@ GameBoyAdvanceSaves.prototype.readEEPROM8 = function (address) {
 GameBoyAdvanceSaves.prototype.readGPIO16 = function (address) {
     address = address | 0;
     var data = 0;
-    if ((this.GPIOChip.getType() | 0) > 0) {
+    if ((this.gpioType | 0) > 0) {
         //GPIO:
         data = this.GPIOChip.read16(address | 0) | 0;
     }
@@ -115,7 +108,7 @@ GameBoyAdvanceSaves.prototype.readEEPROM16 = function (address) {
 GameBoyAdvanceSaves.prototype.readGPIO32 = function (address) {
     address = address | 0;
     var data = 0;
-    if ((this.GPIOChip.getType() | 0) > 0) {
+    if ((this.gpioType | 0) > 0) {
         //GPIO:
         data = this.GPIOChip.read32(address | 0) | 0;
     }
@@ -159,7 +152,7 @@ GameBoyAdvanceSaves.prototype.readSRAM = function (address) {
 GameBoyAdvanceSaves.prototype.writeGPIO8 = function (address, data) {
     address = address | 0;
     data = data | 0;
-    if ((this.GPIOChip.getType() | 0) > 0) {
+    if ((this.gpioType | 0) > 0) {
         //GPIO:
         this.GPIOChip.write8(address | 0, data | 0);
     }
@@ -171,7 +164,7 @@ GameBoyAdvanceSaves.prototype.writeGPIO8 = function (address, data) {
 GameBoyAdvanceSaves.prototype.writeGPIO16 = function (address, data) {
     address = address | 0;
     data = data | 0;
-    if ((this.GPIOChip.getType() | 0) > 0) {
+    if ((this.gpioType | 0) > 0) {
         //GPIO:
         this.GPIOChip.write16(address | 0, data | 0);
     }
@@ -195,7 +188,7 @@ GameBoyAdvanceSaves.prototype.writeEEPROM16 = function (address, data) {
 GameBoyAdvanceSaves.prototype.writeGPIO32 = function (address, data) {
     address = address | 0;
     data = data | 0;
-    if ((this.GPIOChip.getType() | 0) > 0) {
+    if ((this.gpioType | 0) > 0) {
         //GPIO:
         this.GPIOChip.write32(address | 0, data | 0);
     }

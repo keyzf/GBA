@@ -95,7 +95,6 @@ var games = {
     "pokemonruby":"Pokemon Ruby",
     "pokemonsapphire":"Pokemon Sapphire",
     "pokemonred":"Pokemon Fire Red",
-    "nfrp":"Pokemon Fire Red (Nameless Project Mod)",
     "pokemonlp":"Pokemon Light Platinum (Ruby Mod)",
     "gba_video_pokemon_1":"Pokemon Video Pak 1",
     "gba_video_pokemon_2":"Pokemon Video Pak 2",

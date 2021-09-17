@@ -49,6 +49,7 @@ var games = {
     "fzero_gp":"F-Zero - GP Legend",
     "fzero_max":"F-Zero - Maximum Velocity",
     "gamewatch4":"Game & Watch Gallery 4",
+    "gbacraft":"GBACraft",
     "goldensun":"Golden Sun",
     "gta":"Grand Theft Auto Advance",
     "gunstar_super_heroes":"Gunstar Super Heroes",

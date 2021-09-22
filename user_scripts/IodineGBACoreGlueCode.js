@@ -24,8 +24,6 @@ var games = {
     "bomberman_max2blue":"Bomberman Max 2 - Blue Advance",
     "bomberman_tournament":"Bomberman Tournament",
     "bubblebobble":"Bubble Bobble",
-    "smb":"Classic NES Series - Super Mario Bros.",
-    "tlz":"Classic NES Series - The Legend Of Zelda",
     "cbha":"Crash Bandicoot - The Huge Adventure",
     "cbprr":"Crash Bandicoot - Purple Riptos Rampage",
     "cb2":"Crash Bandicoot 2 - N-Tranced",
